@@ -1,8 +1,8 @@
 import os
-import flask
 import json
+from flask import Flask, g, request, Response, redirect
 
-app = flask.Flask(__name__)
+app = Flask(__name__)
 
 @app.before_request
 def preprocess():
@@ -11,8 +11,7 @@ def preprocess():
 
 @app.after_request
 def postprocess(response):
-    pass
-
+    return response
 
 @app.errorhandler(404)
 def pageNotFoundError(error):
