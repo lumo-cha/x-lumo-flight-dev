@@ -32,8 +32,8 @@ def contentLimitExceeded(error):
     return json.dumps(error_json)
 
 
-@app.route('/')
-def hello():
-    return 'Hello World!'
+@app.route('/uptest')
+def uptest():
+    return 'Hello World'
 
 
