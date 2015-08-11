@@ -1,0 +1,7 @@
+venv
+*.pyc
+*.envbash
+*.env
+*.swp
+*.swo
+*.csv
