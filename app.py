@@ -1,38 +1,111 @@
 import os
 import json
-from flask import Flask, g, request, Response, redirect
+from flask import *
+from functools import wraps
+from werkzeug.exceptions import BadRequest
 
+# configure the app
 app = Flask(__name__)
+app.config["JSON_AS_ASCII"] = False
+app.config["JSON_SORT_KEYS"] = True
+app.config["JSONIFY_PRETTYPRINT_REGULAR"] = True
+app.config["MAX_CONTENT_LENGTH"] = 1 * 1024 * 2024  # bytes
 
 @app.before_request
 def preprocess():
     pass
 
-
 @app.after_request
 def postprocess(response):
+    response.headers["Transfer-Encoding"] = "gzip"
+    response.headers["test"] = "1234"
     return response
-
-@app.errorhandler(404)
-def pageNotFoundError(error):
-    error_json = {"error" : "HTTP Page Not Found", "error_code" : 404}
-    return json.dumps(error_json)
-
-
-@app.errorhandler(405)
-def invalidMethod(error):
-    error_json = {"error": "HTTP Method Not Allowed", "error_code": 405}
-    return json.dumps(error_json)
-
-
-@app.errorhandler(413)
-def contentLimitExceeded(error):
-    error_json = {"error" : "HTTP Content Length Exceeded" , "error_code" : 413}
-    return json.dumps(error_json)
-
 
 @app.route('/uptest')
 def uptest():
     return 'Hello World'
 
+@app.route("/json_echo", methods=["POST"])
+def json_test():
+    try:
+        json_data = request.get_json()
+        if not json_data:
+            return jsonify({"error": "improper content-type. must be application/json"}), 400
+        
+        
+        return jsonify(json_data)
+    except BadRequest as e:
+        return jsonify({"error": "improper json"}), 400
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+
+@app.errorhandler(404)
+def pageNotFoundError(error):
+    error_json = {"error" : "HTTP Page Not Found", "error_code" : 404}
+    return jsonify(error_json), 404
+
+
+@app.errorhandler(405)
+def invalidMethod(error):
+    error_json = {"error": "HTTP Method Not Allowed", "error_code": 405}
+    return jsonify(error_json), 405
+
+
+@app.errorhandler(413)
+def contentLimitExceeded(error):
+    error_json = {"error" : "HTTP Content Length Exceeded" , "error_code" : 413}
+    return jsonify(error_json), 413
+
+    """
+    try:
+        json_data = request.get_json()
+        return jsonify(json_data)
+    except Exception as e:
+        return jsonify({"li": "cha"})
+    """
+#        return flask.jsonify({"error": str(e)})
+#    return flask.jsonify(json_data)
+
+"""
+@app.route("/upload_summary", methods=["POST"])
+def upload_summary():
+    if request.is_json():
+
+    else:
+        alert(415)
+
+@app.route("/upload_raw", methods=["POST"])
+def upload_run():
+    if request.is_json():
+
+    else:
+        alert(415)
+
+    response = {}
+    params = request.values.items()
+    try:
+        if "data" in params:
+            data = params["data"]
+
+            try:
+                json_data = json.loads(data)
+            except ValueError:
+                # improper json sent to us
+                response["error"] = "invalid json upload"
+
+        else:
+            json_data
+    except Exception as e:
+        response["exception"] = str(e)
+    finally:
+        return flask.jsonify(**response)
+
+
+    pass
+
+@app.route("/download_run", methods=["GET"])
+
+"""
 
