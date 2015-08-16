@@ -17,8 +17,8 @@ def preprocess():
 
 @app.after_request
 def postprocess(response):
+    # TODO get transfer encoding to work
     response.headers["Transfer-Encoding"] = "gzip"
-    response.headers["test"] = "1234"
     return response
 
 @app.route('/uptest')
