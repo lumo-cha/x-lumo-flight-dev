@@ -28,12 +28,11 @@ class Lumodb:
           else:
             Lumodb.conn.close()
             Lumodb.conn = None
-        # follower database credentials (YELLOW)
-        self.__DB_HOST = "lumocha-postgresql.ck4vbjenwmdo.us-west-2.rds.amazonaws.com"
-        self.__DB_NAME = "lumocha_postgresql"
-        self.__DB_USER = "chavli"
+        self.__DB_HOST = "lumocha-postgres.ck4vbjenwmdo.us-west-2.rds.amazonaws.com"
+        self.__DB_NAME = "lumocha_db"
+        self.__DB_USER = "lumocha"
         self.__DB_PORT = 5432
-        self.__DB_PASS = "03QlXiZ1415&"
+        self.__DB_PASS = "99bottlesofbeer"
         self.__conn = psycopg2.connect("dbname=%s user=%s password=%s host=%s port=%d"
                                        % (self.__DB_NAME, self.__DB_USER,self.__DB_PASS,
                                         self.__DB_HOST, self.__DB_PORT ))
