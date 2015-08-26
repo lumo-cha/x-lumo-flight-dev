@@ -19,7 +19,7 @@ def preprocess():
 
 @app.after_request
 def postprocess(response):
-    return response 
+    return response
 
 # --------------------------------------------------------------------------------------------------
 #   function decorators
@@ -59,7 +59,7 @@ def gzipped_response(f):
             gzip_file = gzip.GzipFile(mode='wb', fileobj=gzip_buffer)
             gzip_file.write(response.data)
             gzip_file.close()
-            
+
             # put together the response (headers + content). we add a custom header key containing
             # the pre-compression data size.
             response.direct_passthrough = False
